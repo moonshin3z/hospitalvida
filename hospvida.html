@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Procedimientos Médicos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #8efca6;
+            background-color: #77b8f5;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-section label {
+            margin-top: 15px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .notes {
+            height: 100px;
+        }
+
+        @media print {
+            button {
+                display: none;
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 150px;
+        }
+
+        .procedimiento {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Logo del hospital -->
+    <div class="logo">
+        <img src="logov.png" alt="Logo del Hospital">
+    </div>
+
+    <h2>Registro de Procedimientos Médicos</h2>
+    
+    <!-- Contenedor dinámico de procedimientos -->
+    <div id="procedimientos-container">
+        <div class="procedimiento">
+            <!-- Procedimiento 1 -->
+            <div class="form-section">
+                <label for="fecha">Fecha de Ingreso:</label>
+                <input type="date" id="fecha-1" name="fecha[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="hora-ingreso">Hora de Ingreso:</label>
+                <input type="time" id="hora-ingreso-1" name="hora-ingreso[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="paciente">Nombre del Paciente:</label>
+                <input type="text" id="paciente-1" name="paciente[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="medico">Médico Tratante:</label>
+                <input type="text" id="medico-1" name="medico[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="motivo">Motivo del Procedimiento:</label>
+                <textarea id="motivo-1" name="motivo[]" required></textarea>
+            </div>
+
+            <div class="form-section">
+                <label for="edad">Edad del Paciente:</label>
+                <input type="number" id="edad-1" name="edad[]" min="0" required>
+            </div>
+
+            <div class="form-section">
+                <label for="acompanantes">Personal Médico que Acompaña:</label>
+                <input type="text" id="acompanantes-1" name="acompanantes[]" placeholder="Ej. Anestesiólogo, Instrumentista" required>
+            </div>
+
+            <div class="form-section">
+                <label for="hora-cirugia">Hora de la Cirugía:</label>
+                <input type="time" id="hora-cirugia-1" name="hora-cirugia[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="sala">Sala de Operación:</label>
+                <input type="text" id="sala-1" name="sala[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="notas">Notas Importantes:</label>
+                <textarea id="notas-1" name="notas[]" class="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button type="button" onclick="addProcedure()">Agregar Procedimiento</button>
+        <button type="button" onclick="printPage()">Imprimir</button>
+        <button type="button" onclick="downloadForm()">Descargar</button>
+    </div>
+</div>
+
+<script>
+    let procedureCount = 1;
+
+    function addProcedure() {
+        procedureCount++;
+        const container = document.getElementById('procedimientos-container');
+
+        // Crear un nuevo div para el nuevo procedimiento
+        const newProcedure = document.createElement('div');
+        newProcedure.classList.add('procedimiento');
+        
+        // Estructura del nuevo procedimiento (copia del primero)
+        newProcedure.innerHTML = `
+            <div class="form-section">
+                <label for="fecha">Fecha de Ingreso:</label>
+                <input type="date" id="fecha-${procedureCount}" name="fecha[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="hora-ingreso">Hora de Ingreso:</label>
+                <input type="time" id="hora-ingreso-${procedureCount}" name="hora-ingreso[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="paciente">Nombre del Paciente:</label>
+                <input type="text" id="paciente-${procedureCount}" name="paciente[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="medico">Médico Tratante:</label>
+                <input type="text" id="medico-${procedureCount}" name="medico[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="motivo">Motivo del Procedimiento:</label>
+                <textarea id="motivo-${procedureCount}" name="motivo[]" required></textarea>
+            </div>
+
+            <div class="form-section">
+                <label for="edad">Edad del Paciente:</label>
+                <input type="number" id="edad-${procedureCount}" name="edad[]" min="0" required>
+            </div>
+
+            <div class="form-section">
+                <label for="acompanantes">Personal Médico que Acompaña:</label>
+                <input type="text" id="acompanantes-${procedureCount}" name="acompanantes[]" placeholder="Ej. Anestesiólogo, Instrumentista" required>
+            </div>
+
+            <div class="form-section">
+                <label for="hora-cirugia">Hora de la Cirugía:</label>
+                <input type="time" id="hora-cirugia-${procedureCount}" name="hora-cirugia[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="sala">Sala de Operación:</label>
+                <input type="text" id="sala-${procedureCount}" name="sala[]" required>
+            </div>
+
+            <div class="form-section">
+                <label for="notas">Notas Importantes:</label>
+                <textarea id="notas-${procedureCount}" name="notas[]" class="notes"></textarea>
+            </div>
+        `;
+        container.appendChild(newProcedure); // Añadir el nuevo procedimiento al contenedor
+    }
+
+    function printPage() {
+        window.print();
+    }
+
+    function downloadForm() {
+        const formData = new FormData();
+
+        // Recopilar todos los datos del formulario
+        document.querySelectorAll('#procedimientos-container .procedimiento').forEach((procedimiento, index) => {
+            const inputs = procedimiento.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                formData.append(`${input.name}[${index}]`, input.value);
+            });
+        });
+
+        const data = {};
+        for (const [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+
+        // Convertir los datos a JSON y descargarlos
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'procedimientos-medicos.json';
+        a.click();
+        
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+</body>
+</html>
